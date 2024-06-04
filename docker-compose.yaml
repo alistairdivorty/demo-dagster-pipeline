@@ -1,0 +1,92 @@
+services:
+  # Runs PostgreSQL database instance for storing run data and event log.
+  dagster_postgresql:
+    image: postgres:11
+    volumes:
+      - dagster-pipeline-postgresql-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dagster-network
+
+  # Runs Dagster daemon process, which operates schedules, sensors, and run queuing.
+  dagster_daemon:
+    build:
+      target: dagster_daemon
+    entrypoint:
+      - dagster-daemon
+      - run
+    restart: on-failure
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dagster-network
+    depends_on:
+      dagster_postgresql:
+        condition: service_healthy
+      user_code_grpc:
+        condition: service_healthy
+
+  # Runs Dagster web server, which loads user code from code location server and serves UI.
+  dagster_webserver:
+    build:
+      target: dagster_webserver
+    entrypoint:
+      - dagster-webserver
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3000"
+      - -w
+      - workspace.yaml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    expose:
+      - "3000"
+    ports:
+      - "3001:3000"
+    networks:
+      - dagster-network
+    depends_on:
+      dagster_postgresql:
+        condition: service_healthy
+      user_code_grpc:
+        condition: service_healthy
+
+  # Runs gRPC server that loads user code.
+  user_code_grpc:
+    build:
+      target: user_code_grpc
+    command:
+      - dagster
+      - code-server
+      - start
+      - -m
+      - dagster_pipeline
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "4000"
+    restart: always
+    volumes:
+      - ./dagster_pipeline/:/opt/dagster/app/dagster_pipeline/
+    environment:
+      # Tells run launcher to use this same image when launching runs in a new container
+      DAGSTER_CURRENT_IMAGE: user_code_grpc
+    healthcheck:
+      test: dagster api grpc-health-check --host dagster_pipeline --port 4000 || exit 0
+      interval: 10s
+      start_period: 10s
+    networks:
+      - dagster-network
+
+networks:
+  dagster-network:
+
+volumes:
+  dagster-pipeline-postgresql-data:

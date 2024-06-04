@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "dagster-pipeline"
+version = "0.1.0"
+description = "Demo Dagster data pipeline for MDRx learning day"
+authors = ["alistairdivorty <alistair.divorty@mdrx.tech>"]
+
+[tool.poetry.dependencies]
+python = "^3.10,<3.13"
+dagster = "^1.7.8"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.4.7"
+isort = "^5.13.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
