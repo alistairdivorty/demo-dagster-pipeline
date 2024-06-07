@@ -34,6 +34,8 @@ Install the Microsoft [Black Formatter extension for Visual Studio Code](https:/
 
 Run the command `just build` to build Docker images and start services with Docker Compose.
 
+To initiate a job run via the sensor for processing SQS messages run the command `just send-message`.
+
 ## Exercises
 
 1. Add an asset with an upstream dependency.

@@ -1,7 +1,1 @@
-from dagster import Definitions
-
-from dagster_pipeline.assets import test_asset
-
-defs = Definitions(
-    assets=[test_asset],
-)
+from dagster_pipeline.definitions import defs as defs

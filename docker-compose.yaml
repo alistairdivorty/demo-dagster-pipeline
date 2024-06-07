@@ -75,6 +75,7 @@ services:
     restart: always
     volumes:
       - ./dagster_pipeline/:/opt/dagster/app/dagster_pipeline/
+      - ~/.aws:/root/.aws:ro
     environment:
       # Tells run launcher to use this same image when launching runs in a new container
       DAGSTER_CURRENT_IMAGE: user_code_grpc
@@ -93,6 +94,8 @@ services:
     volumes:
       - ./init-aws.sh:/etc/localstack/init/ready.d/init-aws.sh
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - dagster-network
 
 networks:
   dagster-network:
