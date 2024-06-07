@@ -6,14 +6,25 @@ authors = ["alistairdivorty <alistair.divorty@mdrx.tech>"]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.13"
-dagster = "^1.7.8"
 boto3 = "^1.34.121"
+
+
+[tool.poetry.group.dagster.dependencies]
+dagster = "^1.7.9"
+dagster-postgres = "^0.23.9"
+
+
+[tool.poetry.group.dagster-webserver.dependencies]
+dagster-webserver = "^1.7.9"
 
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.4.7"
 isort = "^5.13.2"
 pytest = "^8.2.2"
+
+[tool.isort]
+profile = "black"
 
 [build-system]
 requires = ["poetry-core"]
