@@ -32,7 +32,9 @@ Install the Microsoft [Black Formatter extension for Visual Studio Code](https:/
 
 ## Quickstart
 
-Run the command `just build` to build Docker images and start services with Docker Compose.
+Run the command `just build` to build Docker images and start services with Docker Compose. The Dagster web server UI will be served from `http://localhost:3000`.
+
+To initiate a job run via the sensor for processing SQS messages run the command `just send-message`.
 
 ## Exercises
 
