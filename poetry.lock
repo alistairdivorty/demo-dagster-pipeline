@@ -344,6 +344,28 @@ ruff = ["ruff (==0.4.5)"]
 test = ["buildkite-test-collector", "docker", "fsspec (<2024.5.0)", "grpcio-tools (>=1.44.0)", "mock (==3.0.5)", "morefs[asynclocal]", "mypy-protobuf", "objgraph", "pytest (>=7.0.1)", "pytest-cov (==2.10.1)", "pytest-mock (==3.3.1)", "pytest-rerunfailures (==10.0)", "pytest-xdist (==3.5.0)", "rapidfuzz", "responses (<=0.23.1)", "syrupy (>=4.0.0)", "tox (==3.25.0)"]
 
 [[package]]
+name = "dagster-aws"
+version = "0.23.9"
+description = "Package for AWS-specific Dagster framework solid and resource components."
+optional = false
+python-versions = "<3.13,>=3.8"
+files = [
+    {file = "dagster-aws-0.23.9.tar.gz", hash = "sha256:b9ca8c78e16f62c2585a9b20992d5dbaa029dfb8ef6bdc4f5f49246511d235d3"},
+    {file = "dagster_aws-0.23.9-py3-none-any.whl", hash = "sha256:d2a75ee47476957940f5f5899fe53e6cc6ed7078b60b13a1ccc024228ea3d36b"},
+]
+
+[package.dependencies]
+boto3 = "*"
+dagster = "1.7.9"
+packaging = "*"
+requests = "*"
+
+[package.extras]
+pyspark = ["dagster-pyspark"]
+redshift = ["psycopg2-binary"]
+test = ["botocore (!=1.32.1)", "moto[s3,server] (>=2.2.8,<5.0)", "requests-mock", "xmltodict (==0.12.0)"]
+
+[[package]]
 name = "dagster-graphql"
 version = "1.7.9"
 description = "The GraphQL frontend to python dagster."
@@ -2351,4 +2373,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10,<3.13"
-content-hash = "9d39c071c9a5336e04b5dc02889b4173358c25f6928e1012e4234ece3c478a91"
+content-hash = "86abb67acd8de7a5a5fbeb1ff2df0eda9552c5aa58ccd7e725e220d66cd68d46"
