@@ -10,6 +10,10 @@ Install Docker and Docker Compose by following the instructions [here](https://d
 
 Install the `just` command runner by following the instructions [here](https://github.com/casey/just?tab=readme-ov-file#installation).
 
+### Install AWS CLI
+
+Install the AWS Command Line Interface (AWS CLI) by following the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html). SSO credentials can be configured for a named profile with the command `aws configure sso --profile <profile-name>` (only needed for deployment of cloud resources).
+
 ### Install Python (optional)
 
 Install the pyenv Python version manager by following the instructions [here](https://github.com/pyenv/pyenv?tab=readme-ov-file#installation).
@@ -29,6 +33,10 @@ Install the Microsoft [Python extension for Visual Studio Code](https://code.vis
 ### Install VS Code Black Extension (optional)
 
 Install the Microsoft [Black Formatter extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter).
+
+### Install Terraform (optional)
+
+Install the Terraform infrastructure as code tool by following the instructions [here](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli#install-terraform) (only needed for deployment of cloud resources).
 
 ## Quickstart
 

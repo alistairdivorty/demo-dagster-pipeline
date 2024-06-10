@@ -1,5 +1,6 @@
 load_from:
   - grpc_server:
-      host: user_code_grpc
+      host:
+        env: USER_CODE_GRPC_HOST
       port: 4000
       location_name: dagster_pipeline

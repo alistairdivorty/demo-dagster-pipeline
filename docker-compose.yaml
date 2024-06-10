@@ -5,7 +5,7 @@ services:
     volumes:
       - dagster-pipeline-postgresql-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      POSTGRES_HOST_AUTH_METHOD: trust
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d postgres -U postgres"]
       interval: 5s
@@ -16,6 +16,7 @@ services:
 
   # Runs Dagster daemon process, which operates schedules, sensors, and run queuing.
   dagster_daemon:
+    image: dagster_daemon
     build:
       target: dagster_daemon
     entrypoint:
@@ -24,6 +25,16 @@ services:
     restart: on-failure
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      USER_CODE_GRPC_HOST: user_code_grpc
+      S3_BUCKET_NAME: my-bucket
+      S3_BUCKET_ENDPOINT_URL: http://localstack:4566
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/my-queue
+      SQS_QUEUE_ENDPOINT_URL: http://localstack:4566
+      DAGSTER_POSTGRES_HOSTNAME: dagster_postgresql
+      DAGSTER_POSTGRES_USER: postgres
+      DAGSTER_POSTGRES_PASSWORD: secret
+      DAGSTER_POSTGRES_DB: postgres
     networks:
       - dagster-network
     depends_on:
@@ -34,6 +45,7 @@ services:
 
   # Runs Dagster web server, which loads user code from code location server and serves UI.
   dagster_webserver:
+    image: dagster_webserver
     build:
       target: dagster_webserver
     entrypoint:
@@ -46,6 +58,16 @@ services:
       - workspace.yaml
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      USER_CODE_GRPC_HOST: user_code_grpc
+      S3_BUCKET_NAME: my-bucket
+      S3_BUCKET_ENDPOINT_URL: http://localstack:4566
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/my-queue
+      SQS_QUEUE_ENDPOINT_URL: http://localstack:4566
+      DAGSTER_POSTGRES_HOSTNAME: dagster_postgresql
+      DAGSTER_POSTGRES_USER: postgres
+      DAGSTER_POSTGRES_PASSWORD: secret
+      DAGSTER_POSTGRES_DB: postgres
     expose:
       - "3000"
     ports:
@@ -60,6 +82,7 @@ services:
 
   # Runs gRPC server that loads user code.
   user_code_grpc:
+    image: user_code_grpc
     build:
       target: user_code_grpc
     command:
@@ -77,6 +100,14 @@ services:
       - ./dagster_pipeline/:/opt/dagster/app/dagster_pipeline/
       - ~/.aws:/root/.aws:ro
     environment:
+      S3_BUCKET_NAME: my-bucket
+      S3_BUCKET_ENDPOINT_URL: http://localstack:4566
+      SQS_QUEUE_URL: http://localstack:4566/000000000000/my-queue
+      SQS_QUEUE_ENDPOINT_URL: http://localstack:4566
+      DAGSTER_POSTGRES_HOSTNAME: dagster_postgresql
+      DAGSTER_POSTGRES_USER: postgres
+      DAGSTER_POSTGRES_PASSWORD: secret
+      DAGSTER_POSTGRES_DB: postgres
       # Tells run launcher to use this same image when launching runs in a new container
       DAGSTER_CURRENT_IMAGE: user_code_grpc
     healthcheck:

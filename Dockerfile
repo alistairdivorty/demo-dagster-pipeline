@@ -1,4 +1,4 @@
-FROM python:3.10-slim as base
+FROM --platform=linux/amd64 python:3.10-slim as base
 
 ENV DAGSTER_HOME=/opt/dagster/dagster_home
 
@@ -55,3 +55,5 @@ COPY dagster_pipeline ./dagster_pipeline
 
 # Install user code package
 RUN poetry install --without dev --no-interaction --no-ansi
+
+EXPOSE 4000

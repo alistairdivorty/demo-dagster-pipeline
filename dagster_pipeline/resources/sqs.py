@@ -42,7 +42,7 @@ class SQSResource(ConfigurableResource):
 
     def delete_message(self, receipt_handle: str):
         """Delete message identified by its receipt handle."""
-        response = self._queue.delete_messages(
+        response: dict = self._queue.delete_messages(
             Entries=[
                 {
                     "Id": str(uuid4()),
@@ -50,8 +50,10 @@ class SQSResource(ConfigurableResource):
                 }
             ]
         )
-        if len(response["Failed"]):
-            raise Exception(response["Failed"][0]["Message"])
+        if "Failed" in response:
+            failed: list[dict] = response["Failed"]
+            if len(failed):
+                raise Exception(failed[0]["Message"])
 
     def purge(self):
         """Delete all available messages in the queue."""
